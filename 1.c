@@ -7,7 +7,7 @@ menusecundario.c, que abriga o menu com as opções de leitura, cadastro, procur
 int main() {
 
     initscr();  //inicia o modo ncurses
-    cbreak();  //faz com que a entrada que o usuário enviar para o programa seja imediatamente lida, sem necessidade de dar enter
+    cbreak();  //faz com que a entrada que o usuário en viar para o programa seja imediatamente lida, sem necessidade de dar enter
     noecho();  //desabilita a visualização da entrada do teclado do usuário no terminal
     curs_set(FALSE);  //desabilita a visualização do cursor dentro do temrinal
 
