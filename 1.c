@@ -420,6 +420,7 @@ void MensagemBoasVindas() {
                     
                     fscanf(arquivotexto, "%d,", &serie[i].id);
                     fscanf(arquivotexto, "%[^,\n],", serie[i].Nome);
+                    fscanf(arquivotexto, "%[^,\n],", serie[i].Genero);
                     fscanf(arquivotexto, "%d,", &serie[i].Classificacao);
                     fscanf(arquivotexto, "%[^,\n],", serie[i].Plataforma);
                     fscanf(arquivotexto, "%d,", &serie[i].DuracaoMediaEpisodios);
