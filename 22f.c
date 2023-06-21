@@ -129,31 +129,36 @@ void lerSeriesBinario (Serie *serie, int QuantidadeSeries, FILE *arquivo) {
     }//for
 }//void lerseriesBinario
 
-void lerSeries(Serie *serie, int QuantidadeSeries, FILE *arquivo) {
 
-    for (int i = 0; i < QuantidadeSeries; i++) 
-    {
-        serie[i].QuantidadeEpisodiosTotais = 0;
 
-        fscanf(arquivo, "%d,", &serie[i].id);
-        fscanf(arquivo, "%[^,\n],", serie[i].Nome);
-        fscanf(arquivo, "%[^,\n],", serie[i].Genero);
-        fscanf(arquivo, "%d,", &serie[i].Classificacao);
-        fscanf(arquivo, "%[^,\n],", serie[i].Plataforma);
-        fscanf(arquivo, "%d,", &serie[i].DuracaoMediaEpisodios);
-        fscanf(arquivo, "%d,", &serie[i].QuantidadeTemporadas);
+int lerSeries(Serie **serie, int *QuantidadeSeries, FILE *arquivo) {
+    fscanf(arquivo, "%d", QuantidadeSeries);
+    printf("%d", *QuantidadeSeries);
 
-        int realoca = serie[i].QuantidadeTemporadas;
-        serie[i].QuantidadeEpisodiosPorTemporada = (int*) malloc(realoca * sizeof(int));
-                                                                                        
-        for (int j = 0; j < serie[i].QuantidadeTemporadas; j++) {
+    *serie = (Serie*) realloc(*serie, *QuantidadeSeries * sizeof(Serie));
 
-            fscanf(arquivo, "%d,", &serie[i].QuantidadeEpisodiosPorTemporada[j]);
-      
-            serie[i].QuantidadeEpisodiosTotais=serie[i].QuantidadeEpisodiosTotais+serie[i].QuantidadeEpisodiosPorTemporada[j];
-        }//for
-    }//for
-}//void lerseries
+    for (int i = 0; i < *QuantidadeSeries; i++) {
+        (*serie)[i].QuantidadeEpisodiosTotais = 0;
+
+        fscanf(arquivo, "%d,", &(*serie)[i].id);
+        fscanf(arquivo, "%[^,\n],", (*serie)[i].Nome);
+        fscanf(arquivo, "%[^,\n],", (*serie)[i].Genero);
+        fscanf(arquivo, "%d,", &(*serie)[i].Classificacao);
+        fscanf(arquivo, "%[^,\n],", (*serie)[i].Plataforma);
+        fscanf(arquivo, "%d,", &(*serie)[i].DuracaoMediaEpisodios);
+        fscanf(arquivo, "%d,", &(*serie)[i].QuantidadeTemporadas);
+
+        int realoca = (*serie)[i].QuantidadeTemporadas;
+        (*serie)[i].QuantidadeEpisodiosPorTemporada = (int*) malloc(realoca * sizeof(int));
+
+        for (int j = 0; j < (*serie)[i].QuantidadeTemporadas; j++) {
+            fscanf(arquivo, "%d", &(*serie)[i].QuantidadeEpisodiosPorTemporada[j]);
+            (*serie)[i].QuantidadeEpisodiosTotais += (*serie)[i].QuantidadeEpisodiosPorTemporada[j];
+        }
+    }
+
+    return *QuantidadeSeries;
+}//int lerseries
 
 void imprimirSeries(Serie *serie, int QuantidadeSeries)
 {
@@ -614,7 +619,7 @@ void salvaDados(Serie *serie, int QuantidadeSeries)
 void ArquivoHistorico( Historico *historico, int indiceHistorico)
 {
 
-    char pulaLinha= '\n';
+
 
     FILE *arquivohistorico = fopen("arquivobinHistorico.dat", "wb");
 
@@ -624,7 +629,7 @@ void ArquivoHistorico( Historico *historico, int indiceHistorico)
     }else{
 
     fwrite(&indiceHistorico,sizeof(int),1,arquivohistorico);
-    fwrite(&pulaLinha, sizeof(char), 1, arquivohistorico);
+
     for (int i = 0; i < indiceHistorico; i++)
     {
         fwrite(historico[i].Nome,sizeof(char),101,arquivohistorico);
@@ -754,7 +759,7 @@ char* encontrarPlataformaMaisAssistida(Serie *serie, int QuantidadeSeries)
 
 int main() {
     int indiceHistorico = 0;
-    int QuantidadeSeries = 258;
+    int QuantidadeSeries = 1;
     int menu;
 
     Serie *serie = (Serie*) malloc(QuantidadeSeries * sizeof(Serie));
@@ -765,14 +770,14 @@ int main() {
     if (arquivo == NULL) {
         perror("Erro ao abrir o arquivo Binario, tentaremos excutar o arquivo csv.\n");
 
-        FILE *arquivo = fopen("streaming_db.csv", "r");
+        FILE *arquivo = fopen("streaming_db.txt", "r");
 
          if (arquivo == NULL) {
              perror("Erro ao abrir o arquivo CSV.\n");
               return 1;
         }
-        lerSeries(serie, QuantidadeSeries, arquivo);
-        salvaDados(serie,QuantidadeSeries);
+        QuantidadeSeries = lerSeries(&serie, &QuantidadeSeries, arquivo);
+       // salvaDados(serie,QuantidadeSeries);
 
     }else{
 
