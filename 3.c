@@ -438,9 +438,9 @@ void MensagemBoasVindas() {
       
                         serie[i].QuantidadeEpisodiosTotais=serie[i].QuantidadeEpisodiosTotais+serie[i].QuantidadeEpisodiosPorTemporada[j];
         }//for
+                }//for
                          fwrite(&QuantidadeSeries,sizeof(int),1,arquivobinSeries);
                         serie = (Serie*) realloc(serie, QuantidadeSeries * sizeof(Serie));
-                }//for
 
                 for(int i = 0; i < QuantidadeSeries; i++) {
 
