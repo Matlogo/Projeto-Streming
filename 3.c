@@ -437,11 +437,11 @@ void MensagemBoasVindas() {
                         fscanf(arquivotexto, "%d,", &serie[i].QuantidadeEpisodiosPorTemporada[j]);
       
                         serie[i].QuantidadeEpisodiosTotais=serie[i].QuantidadeEpisodiosTotais+serie[i].QuantidadeEpisodiosPorTemporada[j];
-        }//for
-                }//for
-                         fwrite(&QuantidadeSeries,sizeof(int),1,arquivobinSeries);
-                        serie = (Serie*) realloc(serie, QuantidadeSeries * sizeof(Serie));
+                         }//for
+                    }//for
 
+                fwrite(&QuantidadeSeries,sizeof(int),1,arquivobinSeries);
+                serie = (Serie*) realloc(serie, QuantidadeSeries * sizeof(Serie));
                 for(int i = 0; i < QuantidadeSeries; i++) {
 
                     fwrite(&serie[i].id,sizeof(int),1,arquivobinSeries);
